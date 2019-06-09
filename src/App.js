@@ -1,8 +1,18 @@
-import React from 'react';
+import React from 'react'
+import { Provider } from 'react-redux'
+import { ConnectedRouter } from 'connected-react-router'
+import history from './history'
+
+import Root from './components/Root'
+import store from './redux'
 
 function App() {
   return (
-    <h1>Hello World!</h1>
+    <Provider store = {store}>
+      <ConnectedRouter history={history}>
+        <Root />
+      </ConnectedRouter>
+    </Provider>
   );
 }
 
