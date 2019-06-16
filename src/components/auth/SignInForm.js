@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Field, reduxForm } from 'redux-form'
-import validate from '../../helpers';
+import { Link, Redirect } from 'react-router-dom'
+import { validate } from '../../helpers';
 import ErrorField from './ErrorField'
+import './style/SignIn.css'
 
 export class SignInForm extends Component {
   static propTypes = {
@@ -10,21 +12,38 @@ export class SignInForm extends Component {
   }
 
   render() {
-    const {handleSubmit} = this.props;
+    const { handleSubmit, isAuthenticated } = this.props;
+    if(isAuthenticated) {
+      return  (
+        <Redirect to='/'/>
+      )
+    };
     return (
-      <div>
-        <h2>Sign In</h2>
+      <div className="sign-in__container">
+        <h2 className="sign-in__container_title">Sign in!</h2>
+        <p className="sign-in__container_title-signature">Welcome to our community!</p>
         <form onSubmit={handleSubmit}>
-          <Field name="email" component={ErrorField} type="email" />
-          <Field name="password" component={ErrorField} type="password" />
-          <button type="submit">Submit</button>
+          <div className="sign-in__container_email">
+            <Field name="email" label="Email" component={ErrorField} className="sign-in__container_input" type="email" />
+          </div>
+          <div className="sign-in__container_password">
+            <Field name="password" label="Password" component={ErrorField} className="sign-in__container_input" type="password" />
+          </div>
+          <div className="sign-in__container_submit-button">
+            <button type="submit" className="sign-in__container_button">Sign-in</button>
+          </div>
         </form>
+        <div className="sign-in__container_redirect">
+          <p className="sign-in__container_redirect-text">
+            Still don't have an account?<Link to="sign-up" className="sign-in__container_redirect_link">Sign-Up</Link>
+          </p>
+        </div>
       </div>
     )
   }
 }
 
 export default reduxForm({
-  form: 'auth',
+  form: 'sign-in',
   validate
 })(SignInForm)

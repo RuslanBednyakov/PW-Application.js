@@ -1,20 +1,18 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import {Route} from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import AuthPage from '../components/routes/AuthPage'
-import UserPage from '../components/routes/UserPage'
+
+import ProtectedRoute from '../components/common/ProtectedRoute'
+import MainContainer from '../components/main/MainContainer';
 
 export class Root extends Component {
-  static propTypes = {
-
-  }
 
   render() {
     return (
-      <div>
+      <Switch>
         <Route path='/auth' component={AuthPage} />
-        <Route path='/user' component={UserPage} />
-      </div>
+        <ProtectedRoute path='/' component={MainContainer} />
+      </Switch>
     )
   }
 }
