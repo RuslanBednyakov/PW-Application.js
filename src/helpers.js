@@ -1,9 +1,6 @@
 import emailValidator from 'email-validator';
 
 export const validate = ({email, userName, password, confirmPassword}) => {
-  console.log('validating');
-  console.log('userName', userName);
-  console.log('confirmPassword', confirmPassword);
 
   const errors = {};
   

@@ -11,3 +11,9 @@ export function signUp (auth) {
     .then((r) => r.data)
     .catch( err => { throw err } )
 }
+
+export function setUser (auth) {
+  return api.post('auth/set-user', auth)
+    .then((r) => r.data)
+    .catch( err => { throw err } )
+}

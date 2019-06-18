@@ -5,6 +5,7 @@ import { Link, Redirect } from 'react-router-dom'
 import { validate } from '../../helpers';
 import ErrorField from './ErrorField'
 import './style/SignIn.css'
+import Loader from '../common/Loader'
 
 export class SignInForm extends Component {
   static propTypes = {
@@ -12,7 +13,8 @@ export class SignInForm extends Component {
   }
 
   render() {
-    const { handleSubmit, isAuthenticated } = this.props;
+    console.log('Sign In')
+    const { handleSubmit, isAuthenticated, loading } = this.props;
     if(isAuthenticated) {
       return  (
         <Redirect to='/'/>
@@ -30,7 +32,8 @@ export class SignInForm extends Component {
             <Field name="password" label="Password" component={ErrorField} className="sign-in__container_input" type="password" />
           </div>
           <div className="sign-in__container_submit-button">
-            <button type="submit" className="sign-in__container_button">Sign-in</button>
+            {loading && <Loader />}
+            <button disabled={loading} type="submit" className="sign-in__container_button">Sign-in</button>
           </div>
         </form>
         <div className="sign-in__container_redirect">

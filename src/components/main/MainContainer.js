@@ -8,6 +8,7 @@ import Footer from '../common/Footer';
 export class MainContainer extends Component {
 
   render() {
+    console.log('Main Container')
     return (
       <React.Fragment>
         <div className='content'>

@@ -21,6 +21,9 @@ export const SIGN_IN_SUCCESS = `${appName}/${moduleName}/SIGN_IN_SUCCESS`
 export const SIGN_IN_ERROR = `${appName}/${moduleName}/SIGN_IN_ERROR`
 export const SIGN_OUT_REQUEST = `${appName}/${moduleName}/SIGN_OUT_REQUEST`
 export const SIGN_OUT_SUCCESS = `${appName}/${moduleName}/SIGN_OUT_SUCCESS`
+export const SET_USER_REQUEST = `${appName}/${moduleName}/SET_USER_REQUEST`
+export const SET_USER_SUCCESS = `${appName}/${moduleName}/SET_USER_SUCCESS`
+export const SET_USER_ERROR = `${appName}/${moduleName}/SET_USER_ERROR`
 
 export default function reducer(state = new ReducerRecord(), action) {
   const {type, payload, error} = action;
@@ -28,12 +31,16 @@ export default function reducer(state = new ReducerRecord(), action) {
   switch (type) {
     case SIGN_UP_REQUEST:
     case SIGN_IN_REQUEST:
-      console.log('reducer-request')
-      return state.set('loading', true);
+      return state.set('loading', true)
+
+    case SET_USER_REQUEST:
+      return state
+        .set('loading', true)
+        .set('isAuthenticated', true)
 
     case SIGN_IN_SUCCESS:
     case SIGN_UP_SUCCESS:
-      console.log('reducer-success', payload);
+    case SET_USER_SUCCESS:
       const token = Helper.empty(payload) || Helper.empty(payload.token) ? null : payload.token;
       setAuthorizationToken(payload);
       return state
@@ -44,6 +51,7 @@ export default function reducer(state = new ReducerRecord(), action) {
 
     case SIGN_UP_ERROR:
     case SIGN_IN_ERROR:
+    case SET_USER_ERROR:
       return state
         .set('loading', false)
         .set('error', error)
@@ -59,7 +67,6 @@ export default function reducer(state = new ReducerRecord(), action) {
 }
 
 export const signUp = (data) => (dispatch) => {
-  console.log('action', data);
   dispatch({
     type: SIGN_UP_REQUEST,
   })
@@ -79,13 +86,11 @@ export const signUp = (data) => (dispatch) => {
 }
 
 export const signIn = (data) => (dispatch) => {
-  console.log('action', data);
   dispatch({
     type: SIGN_IN_REQUEST,
   })
   API.auth.login(data)
   .then(data => {
-    console.log('returned from axios', data)
     dispatch({
       type: SIGN_IN_SUCCESS,
       payload: data
@@ -94,6 +99,26 @@ export const signIn = (data) => (dispatch) => {
   .catch( err => {
     dispatch({
       type: SIGN_IN_ERROR,
+      err
+    })
+  })
+}
+
+export const setUser = (token) => (dispatch) => {
+  dispatch({
+    type: SET_USER_REQUEST,
+  })
+  API.auth.setUser(token)
+  .then(data => {
+    console.log('returned from axios', data)
+    dispatch({
+      type: SET_USER_SUCCESS,
+      payload: data
+    })
+  })
+  .catch( err => {
+    dispatch({
+      type: SET_USER_ERROR,
       err
     })
   })

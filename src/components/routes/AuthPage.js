@@ -12,11 +12,18 @@ export class AuthPage extends Component {
   }
 
   render() {
-    const {match, isAuthenticated} = this.props;
+    console.log('Auth Page')
+    const {match, isAuthenticated, loading} = this.props;
     return (
       <Switch>
-        <Route path={`${match.url}/sign-in`} render={() => <SignInForm onSubmit={this.handleSignIn} isAuthenticated={isAuthenticated}/>} />
-        <Route path={`${match.url}/sign-up`} render={() => <SignUpForm onSubmit={this.handleSignUp} isAuthenticated={isAuthenticated}/>} />
+        <Route 
+          path={`${match.url}/sign-in`} 
+          render={() => <SignInForm onSubmit={this.handleSignIn} isAuthenticated={isAuthenticated} loading={loading}/>} 
+        />
+        <Route 
+          path={`${match.url}/sign-up`} 
+          render={() => <SignUpForm onSubmit={this.handleSignUp} isAuthenticated={isAuthenticated} loading={loading}/>}
+        />
         <Redirect to={`${match.url}/sign-in`} />
       </Switch>
     )

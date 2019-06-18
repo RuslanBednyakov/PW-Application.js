@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form'
 import { Link, Redirect } from 'react-router-dom'
 import { validate } from '../../helpers';
 import ErrorField from './ErrorField'
+import Loader from '../common/Loader'
 import './style/SignUp.css'
 
 export class SignUpForm extends Component {
@@ -12,7 +13,7 @@ export class SignUpForm extends Component {
   }
 
   render() {
-    const {handleSubmit, isAuthenticated} = this.props;
+    const { handleSubmit, isAuthenticated, loading } = this.props;
     if(isAuthenticated) {
       return (
         <Redirect to="/"/>
@@ -36,7 +37,8 @@ export class SignUpForm extends Component {
             <Field name="confirmPassword" label="Confirm Password" className="sign-up__container_input" component={ErrorField} type="password" />
           </div>
           <div className="sign-up__container_submit-button">
-            <button type="submit" className="sign-up__container_button">Sign-up</button>
+            {loading && <Loader />}
+            <button disabled={loading} type="submit" className="sign-up__container_button">Sign-up</button>
           </div>
         </form>
         <div className="sign-up__container_redirect">

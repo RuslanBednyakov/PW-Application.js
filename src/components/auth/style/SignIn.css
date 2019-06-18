@@ -43,8 +43,10 @@
     box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, 0.15);
 }
 .sign-in__container_submit-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     margin-top: 15px;
-    text-align: end;
 }
 .sign-in__container_button{
     cursor: pointer;
@@ -78,4 +80,11 @@
 .sign-in__container_redirect_link{
     color: blue;
     text-decoration: underline;
+}
+
+.loader{
+    margin: 0;
+    margin-right: 5px;
+    font: 17px bold;
+    line-height: 100%;
 }
