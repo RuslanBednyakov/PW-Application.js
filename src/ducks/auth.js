@@ -1,6 +1,6 @@
-import {appName} from '../config'
-import {Record} from 'immutable'
-import {push} from 'connected-react-router'
+import { appName } from '../config'
+import { Record } from 'immutable'
+import { push } from 'connected-react-router'
 import * as API from '../api'
 import * as Helper  from '../helpers'
 import axios from 'axios'
@@ -36,7 +36,7 @@ export default function reducer(state = new ReducerRecord(), action) {
     case SET_USER_REQUEST:
       return state
         .set('loading', true)
-        .set('isAuthenticated', true)
+        // .set('isAuthenticated', true)
 
     case SIGN_IN_SUCCESS:
     case SIGN_UP_SUCCESS:
@@ -51,13 +51,17 @@ export default function reducer(state = new ReducerRecord(), action) {
 
     case SIGN_UP_ERROR:
     case SIGN_IN_ERROR:
-    case SET_USER_ERROR:
       return state
         .set('loading', false)
         .set('error', error)
 
+    case SET_USER_ERROR:
+      console.log('reducer-logout');
+      setAuthorizationToken();
+      return new ReducerRecord().set('error', error)
+
     case SIGN_OUT_SUCCESS:
-      console.log('reducer-logout', payload);
+      console.log('reducer-logout');
       setAuthorizationToken();
       return new ReducerRecord()
 
@@ -80,7 +84,7 @@ export const signUp = (data) => (dispatch) => {
   .catch( err => {
     dispatch({
       type: SIGN_UP_ERROR,
-      err
+      error: err
     })
   })
 }
@@ -99,18 +103,33 @@ export const signIn = (data) => (dispatch) => {
   .catch( err => {
     dispatch({
       type: SIGN_IN_ERROR,
-      err
+      error: err
     })
   })
 }
 
-export const setUser = (token) => (dispatch) => {
-  dispatch({
-    type: SET_USER_REQUEST,
-  })
-  API.auth.setUser(token)
+export const setUser = (token) => async (dispatch) => {
+  // dispatch({
+  //   type: SET_USER_REQUEST,
+  // })
+  const startingRequest = new Date();
+  const timedOut = 5000;
+  const responseTimedOut = setTimeout(() => {
+    dispatch({
+      type: SET_USER_ERROR,
+      error: {message: 'Set user timed out'}
+    })
+    dispatch(push('/auth/sign-in'))
+  }, timedOut);
+  await API.auth.setUser(token)
   .then(data => {
     console.log('returned from axios', data)
+    const getingResponse = new Date() 
+    console.log('startingRequest', startingRequest);
+    console.log('getingResponse', getingResponse);
+    console.log('result', (getingResponse - startingRequest))
+    if( (getingResponse - startingRequest) > timedOut) return;
+    clearTimeout(responseTimedOut);
     dispatch({
       type: SET_USER_SUCCESS,
       payload: data
@@ -119,13 +138,15 @@ export const setUser = (token) => (dispatch) => {
   .catch( err => {
     dispatch({
       type: SET_USER_ERROR,
-      err
+      error: err
     })
   })
 }
 
+
+
 export function signOut() {
-  push('/auth/signin');
+  push('/auth/sign-in')
   return {
       type: SIGN_OUT_REQUEST
     }
@@ -151,7 +172,7 @@ export function setResponseInterceptors (response) {
     // Do something with response error
     if(error.response.status === 401) {
       localStorage.removeItem('token');
-      push('/auth/signin');
+      push('/auth/sign-in');
     }
     return Promise.reject(error);
   });

@@ -28,7 +28,7 @@ class Api {
         const data = _data;
         response.data = data;
         resolve(response);
-      }, 2000)
+      }, 8000)
     });
     // return  new Promise((resolve, reject) => {
     //   axios.post(path.BASE_URL + path.BASE_API + url, _data)

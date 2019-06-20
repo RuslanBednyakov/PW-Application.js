@@ -5,22 +5,42 @@ import { setUser, moduleName } from '../ducks/auth'
 import AuthPage from '../components/routes/AuthPage'
 import ProtectedRoute from '../components/common/ProtectedRoute'
 import MainContainer from '../components/main/MainContainer'
-import Loader from '../components/common/Loader'
 
 export class Root extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {setingUser: true};
+  }
 
   componentDidMount() {
+    console.log('COMPONENT DID MOUNT')
     const token = localStorage.getItem('token');
+    if (token !== null) {
+      this.handleSetUser(token);
+      return;
+    }
+    this.setState({ setingUser: false });
+  }
+
+  async handleSetUser(token) {
     const data = {
       currentToken: token
     }
-    if (token !== null) {
-      this.props.setUser(data);
-    }
+    console.log('before', this.state)
+    await this.props.setUser(data);
+    console.log('after await');
+    this.setState({ setingUser: false });
   }
 
   render() {
     console.log('Root')
+    console.log('rendering state', this.state)
+    const { setingUser } = this.state;
+    const { setUserTimedOut } = this.props;
+    console.log(setUserTimedOut)
+    if(setingUser && !setUserTimedOut ) {
+      return null;
+    }
     return (
       <Switch>
         <Route path='/auth' component={AuthPage} />
@@ -30,6 +50,8 @@ export class Root extends Component {
   }
 }
 
-export default connect(state => ({
-  loading: state[moduleName].loading,
-}), { setUser }, null, {pure: false})(Root);
+export default connect(state => {
+  const setUserTimedOut = (state[moduleName].error 
+    && (state[moduleName].error.message === 'Set user timed out'))
+  return { setUserTimedOut: setUserTimedOut}
+}, { setUser }, null, {pure: true})(Root);
