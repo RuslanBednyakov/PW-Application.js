@@ -1,10 +1,8 @@
 import React from 'react'
 
 const Footer = () => {
-  return (
-    <header>
-      Footer 
-    </header>
+  return  (
+    <p> &copy; Footer content <a href="#" className="footer__link"> Link footer </a> </p>
   )
 }
 

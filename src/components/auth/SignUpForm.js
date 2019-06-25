@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Field, reduxForm } from 'redux-form'
 import { Link, Redirect } from 'react-router-dom'
-import { validate } from '../../helpers';
-import ErrorField from './ErrorField'
+import { validate } from '../../helpers'
+import ErrorField from '../common/ErrorField'
 import Loader from '../common/Loader'
 import './style/SignUp.css'
 

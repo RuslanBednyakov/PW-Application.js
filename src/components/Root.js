@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { setUser, moduleName } from '../ducks/auth'
+import Loader from './common/Loader'
 import AuthPage from '../components/routes/AuthPage'
 import ProtectedRoute from '../components/common/ProtectedRoute'
-import MainContainer from '../components/main/MainContainer'
+import MainContainer from './routes/MainContainer'
 
 export class Root extends Component {
   constructor(props) {
@@ -39,7 +40,9 @@ export class Root extends Component {
     const { setUserTimedOut } = this.props;
     console.log(setUserTimedOut)
     if(setingUser && !setUserTimedOut ) {
-      return null;
+      return (
+        <Loader />
+      );
     }
     return (
       <Switch>
@@ -51,7 +54,8 @@ export class Root extends Component {
 }
 
 export default connect(state => {
-  const setUserTimedOut = (state[moduleName].error 
-    && (state[moduleName].error.message === 'Set user timed out'))
-  return { setUserTimedOut: setUserTimedOut}
-}, { setUser }, null, {pure: true})(Root);
+  const setUserTimedOut = state[moduleName].error ? 
+    state[moduleName].error.message === 'Set user timed out' :
+    false;
+  return { setUserTimedOut }
+}, { setUser })(Root);
