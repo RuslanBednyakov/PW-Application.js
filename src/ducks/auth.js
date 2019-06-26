@@ -33,16 +33,12 @@ export default function reducer(state = new ReducerRecord(), action) {
     case SIGN_IN_REQUEST:
       return state.set('loading', true)
 
-    case SET_USER_REQUEST:
-      return state
-        .set('loading', true)
-        // .set('isAuthenticated', true)
-
     case SIGN_IN_SUCCESS:
     case SIGN_UP_SUCCESS:
     case SET_USER_SUCCESS:
       const token = Helper.empty(payload) || Helper.empty(payload.token) ? null : payload.token;
       setAuthorizationToken(payload);
+      setResponseInterceptors ();
       return state
         .set('loading', false)
         .set('user', payload.user)
@@ -109,27 +105,10 @@ export const signIn = (data) => (dispatch) => {
 }
 
 export const setUser = (token) => async (dispatch) => {
-  // dispatch({
-  //   type: SET_USER_REQUEST,
-  // })
-  const startingRequest = new Date();
-  const timedOut = 5000;
-  const responseTimedOut = setTimeout(() => {
-    dispatch({
-      type: SET_USER_ERROR,
-      error: {message: 'Set user timed out'}
-    })
-    dispatch(push('/auth/sign-in'))
-  }, timedOut);
-  await API.auth.setUser(token)
+  API.auth.setUser(token)
   .then(data => {
     console.log('returned from axios', data)
-    const getingResponse = new Date() 
-    console.log('startingRequest', startingRequest);
-    console.log('getingResponse', getingResponse);
-    console.log('result', (getingResponse - startingRequest))
-    if( (getingResponse - startingRequest) > timedOut) return;
-    clearTimeout(responseTimedOut);
+    //check response
     dispatch({
       type: SET_USER_SUCCESS,
       payload: data
@@ -163,12 +142,14 @@ export function setAuthorizationToken (response) {
   }
 }
 
-export function setResponseInterceptors (response) {
+export function setResponseInterceptors () {
 
-  axios.defaults.interceptors.response.use(function (response) {
+  axios.interceptors.response.use(function (response) {
+    console.log('axios interseptor response seccess')
     // Do something with response data
     return response;
   }, function (error) {
+    console.log('axios interseptor response error')
     // Do something with response error
     if(error.response.status === 401) {
       localStorage.removeItem('token');

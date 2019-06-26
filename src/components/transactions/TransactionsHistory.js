@@ -7,7 +7,7 @@ export class TransactionsHistory extends Component {
   }
 
   render() {
-    console.log(TransactionsHistory)
+    console.log('TransactionsHistory')
     return (
       <div>
         Transactions History
