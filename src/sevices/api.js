@@ -20,21 +20,11 @@ class Api {
   }
 
   post(url, _data = {}) {
-    console.log('in axios', _data);
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const response = {};
-        _data.token = 'dfjnewfojmosimokw';
-        const data = _data;
-        response.data = data;
-        resolve(response);
-      }, 2000)
+    return  new Promise((resolve, reject) => {
+      axios.post(path.BASE_URL + path.BASE_API + url, _data)
+        .then(({data}) => resolve(data))
+        .catch(error => reject(error));
     });
-    // return  new Promise((resolve, reject) => {
-    //   axios.post(path.BASE_URL + path.BASE_API + url, _data)
-    //     .then(({data}) => resolve(data))
-    //     .catch(error => reject(error));
-    // });
   }
 
   delete(url) {

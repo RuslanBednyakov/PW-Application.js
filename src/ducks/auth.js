@@ -1,15 +1,18 @@
 import { appName } from '../config'
 import { Record } from 'immutable'
+import history from '../history'
 import { push } from 'connected-react-router'
 import * as API from '../api'
 import * as Helper  from '../helpers'
 import axios from 'axios'
 
+
 export const ReducerRecord = Record({
   user: null,
   error: null,
   loading: false,
-  isAuthenticated: false
+  isAuthenticated: false,
+  token: null
 })
 
 export const moduleName = 'auth'
@@ -36,17 +39,20 @@ export default function reducer(state = new ReducerRecord(), action) {
     case SIGN_IN_SUCCESS:
     case SIGN_UP_SUCCESS:
     case SET_USER_SUCCESS:
+      console.log('Sign Succ', payload);
       const token = Helper.empty(payload) || Helper.empty(payload.token) ? null : payload.token;
-      setAuthorizationToken(payload);
+      setAuthorizationToken(token);
       setResponseInterceptors ();
       return state
         .set('loading', false)
         .set('user', payload.user)
         .set('error', error)
         .set('isAuthenticated', !Helper.empty(token))
+        .set('token', token)
 
     case SIGN_UP_ERROR:
     case SIGN_IN_ERROR:
+      console.log('state error', error)
       return state
         .set('loading', false)
         .set('error', error)
@@ -59,6 +65,7 @@ export default function reducer(state = new ReducerRecord(), action) {
     case SIGN_OUT_SUCCESS:
       console.log('reducer-logout');
       setAuthorizationToken();
+      deleteResponseInterceptor();
       return new ReducerRecord()
 
     default: 
@@ -104,8 +111,11 @@ export const signIn = (data) => (dispatch) => {
   })
 }
 
-export const setUser = (token) => async (dispatch) => {
-  API.auth.setUser(token)
+export const setUser = (token) => (dispatch) => {
+  console.log('Set User Token', token);
+  setAuthorizationToken (token);
+  setResponseInterceptors ();
+  API.auth.setUser()
   .then(data => {
     console.log('returned from axios', data)
     //check response
@@ -125,36 +135,43 @@ export const setUser = (token) => async (dispatch) => {
 
 
 export function signOut() {
-  push('/auth/sign-in')
+  // push('/auth/sign-in')
   return {
-      type: SIGN_OUT_REQUEST
+      type: SIGN_OUT_SUCCESS
     }
 }
 
-export function setAuthorizationToken (response) {
+ function setAuthorizationToken(token) {
 
-  if (Helper.empty(response) || Helper.empty(response.token)) {
+  if (Helper.empty(token)) {
     delete axios.defaults.headers.common['Authorization'];
     localStorage.removeItem('token');
   } else {
-    localStorage.setItem('token', response.token);
-    axios.defaults.headers.common['Authorization'] = response.token
+    localStorage.setItem('token', token);
+    axios.defaults.headers.common['Authorization'] = token
   }
 }
 
-export function setResponseInterceptors () {
+let checkTokenInterceptor;
 
-  axios.interceptors.response.use(function (response) {
+function setResponseInterceptors() {
+  
+  checkTokenInterceptor = axios.interceptors.response.use(function (response) {
     console.log('axios interseptor response seccess')
     // Do something with response data
     return response;
   }, function (error) {
-    console.log('axios interseptor response error')
+    console.log('axios interseptor response error', error.response.status)
     // Do something with response error
     if(error.response.status === 401) {
       localStorage.removeItem('token');
-      push('/auth/sign-in');
+      console.log('axios interseptor response error push');
+      history.push('/auth/sign-in');
     }
     return Promise.reject(error);
   });
+}
+
+function deleteResponseInterceptor() {
+  axios.interceptors.response.eject(checkTokenInterceptor);
 }

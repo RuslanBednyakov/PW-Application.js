@@ -9,19 +9,25 @@ export class NewTransactionForm extends Component {
 
   }
 
+  onSubmit = (data) => {
+    const { handleSubmit, reset } = this.props;
+    handleSubmit(data)
+    reset();
+  }
+
   render() {
     console.log('NewTransactionForm');
-    const { handleSubmit, loading } = this.props;
+    const { loading } = this.props;
     return (
       <div className="new-transaction__container">
         <h2 className="new-transaction__container_title">New Transaction</h2>
         <p className="new-transaction__container_title-signature">Create your own account and join us</p>
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={this.onSubmit} >
           <div className="new-transaction__container_name">
-            <Field name="userName" label="Name" className="new-transaction__container_input" component={ErrorField} type='text' />
+            <Field name="userName" label="Name" className="new-transaction__container_input" component={ErrorField} type='text'/>
           </div>
           <div className="new-transaction__container_amount">
-            <Field name="password" label="Amount" className="new-transaction__container_input" component={ErrorField} type="password" />
+            <Field name="amount" label="Amount" className="new-transaction__container_input" component={ErrorField} type="number"/>
           </div>
           <div className="new-transaction__container_submit-button">
             {loading && <Loader />}

@@ -8,12 +8,15 @@ export function login (auth) {
 
 export function signUp (auth) {
   return api.post('auth/sign-up', auth)
-    .then((r) => r.data)
+    .then((r) => {
+      console.log(r)
+      return r.data
+    })
     .catch( err => { throw err } )
 }
 
-export function setUser (auth) {
-  return api.post('auth/set-user', auth)
+export function setUser () {
+  return api.get('user')
     .then((r) => r.data)
     .catch( err => { throw err } )
 }

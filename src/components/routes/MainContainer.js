@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Header from '../common/Header';
 import NavigationBar from '../common/NavigationBar';
@@ -7,10 +7,12 @@ import Footer from '../common/Footer';
 import Transactions from './Transactions'
 
 export class MainContainer extends Component {
+  static propTypes = {
+
+  }
 
   render() {
-    console.log('Main Container')
-    const {match} = this.props;
+    console.log('Main Container', this.props)
     return (
       <React.Fragment>
         <div className='content'>
@@ -20,7 +22,8 @@ export class MainContainer extends Component {
             <div className='container'>
               <div className ='main'>
                 <Switch>
-                  <Route path={`/transactions`}  component={Transactions} />}/>
+                  <Route path='/transactions'  component={Transactions} />
+                  <Redirect to='/transactions' />
                 </Switch>
               </div>
             </div>

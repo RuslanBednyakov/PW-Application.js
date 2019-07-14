@@ -9,7 +9,10 @@ import './style/SignUp.css'
 
 export class SignUpForm extends Component {
   static propTypes = {
-
+    // from props
+    isAuthenticated: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
+    handleSubmit: PropTypes.func.isRequired
   }
 
   render() {
@@ -28,7 +31,7 @@ export class SignUpForm extends Component {
             <Field name="email" label="Email" className="sign-up__container_input" component={ErrorField} type="email" />
           </div>
           <div className="sign-up__container_name">
-            <Field name="userName" label="Name" className="sign-up__container_input" component={ErrorField} type='text' />
+            <Field name="name" label="Name" className="sign-up__container_input" component={ErrorField} type='text' />
           </div>
           <div className="sign-up__container_password">
             <Field name="password" label="Password" className="sign-up__container_input" component={ErrorField} type="password" />

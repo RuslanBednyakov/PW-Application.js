@@ -2,6 +2,7 @@ import React from 'react'
 import UserProfile from './UserProfile'
 
 const Header = () => {
+  console.log('HEADER')
   return (
     <header className="header">
       <div className="container header__container">

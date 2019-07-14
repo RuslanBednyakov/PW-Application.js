@@ -8,12 +8,17 @@ import SignUpForm from '../auth/SignUpForm'
 
 export class AuthPage extends Component {
   static propTypes = {
-
+    // from store
+    isAuthenticated: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
+    signUp: PropTypes.func.isRequired,
+    signIn: PropTypes.func.isRequired
   }
 
   render() {
-    console.log('Auth Page')
-    const {match, isAuthenticated, loading} = this.props;
+    console.log('Auth Page');
+    console.log('Auth props', this.props)
+    const { match, isAuthenticated, loading } = this.props;
     return (
       <Switch>
         <Route 
@@ -43,4 +48,4 @@ export class AuthPage extends Component {
 export default connect(state => ({
   loading: state[moduleName].loading,
   isAuthenticated: state[moduleName].isAuthenticated
-}), { signUp, signIn }, null, {pure: false})(AuthPage);
+}), { signUp, signIn })(AuthPage);

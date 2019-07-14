@@ -9,12 +9,16 @@ import Loader from '../common/Loader'
 
 export class SignInForm extends Component {
   static propTypes = {
-
+    // from props
+    isAuthenticated: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
+    handleSubmit: PropTypes.func.isRequired
   }
 
   render() {
     console.log('Sign In')
     const { handleSubmit, isAuthenticated, loading } = this.props;
+    console.log('isAuthenticated', isAuthenticated)
     if(isAuthenticated) {
       return  (
         <Redirect to='/'/>

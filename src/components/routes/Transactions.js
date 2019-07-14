@@ -32,6 +32,7 @@ export class Transactions extends Component {
   handleNewTransaction = (value) => {
     // const { signIn } = this.props;
     // signIn(value);
+    console.log('handleNewTransaction!!!!!!!!!!!!!!!')
     console.log(value)
   }
 }

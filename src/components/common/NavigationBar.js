@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
-import {moduleName} from '../../ducks/auth'
+import { signOut } from '../../ducks/auth'
 
 
 class NavigationBar extends Component {
 
   render(){
+    console.log('NavigationBar')
+    const { signOut } = this.props;
     return  (
       <nav className="container menu">
         <ul className="menu__list">
@@ -16,8 +18,8 @@ class NavigationBar extends Component {
           <li className="menu__list_item transaction-history">
             <NavLink to="/transactions/history" className="menu__list_item-link">Transaction History</NavLink>
           </li>
-          <li className="menu__list_item logOut">
-            <NavLink to="/log-out" className="menu__list_item-link">Log Out</NavLink>
+          <li className="menu__list_item logOut" onClick ={() => signOut()}>
+            <NavLink to="/" className="menu__list_item-link">Log Out</NavLink>
           </li>
         </ul>
       </nav>
@@ -25,4 +27,4 @@ class NavigationBar extends Component {
   }
 }
 
-export default NavigationBar;
+export default connect(null, { signOut })(NavigationBar);

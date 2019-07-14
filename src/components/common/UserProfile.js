@@ -13,10 +13,10 @@ export class UserProfile extends Component {
     return (
       <div className='header__container_user'>
         <div className='header__container_user-name'>
-          {/* {user.name} */}
+          User Name
         </div>
         <div className='header__container_user-balance'>
-          {}
+          User Balance
         </div>
       </div>
     )
