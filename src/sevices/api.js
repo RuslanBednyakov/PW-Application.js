@@ -23,7 +23,9 @@ class Api {
     return  new Promise((resolve, reject) => {
       axios.post(path.BASE_URL + path.BASE_API + url, _data)
         .then(({data}) => resolve(data))
-        .catch(error => reject(error));
+        .catch(error => {
+          console.log('api error', error.message)
+          reject(error)});
     });
   }
 

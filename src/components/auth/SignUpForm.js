@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Field, reduxForm } from 'redux-form'
 import { Link, Redirect } from 'react-router-dom'
-import { validate } from '../../helpers'
+import { validate, asyncValidate } from '../../helpers'
 import ErrorField from '../common/ErrorField'
 import Loader from '../common/Loader'
 import './style/SignUp.css'
@@ -16,7 +16,7 @@ export class SignUpForm extends Component {
   }
 
   render() {
-    const { handleSubmit, isAuthenticated, loading } = this.props;
+    const { handleSubmit, isAuthenticated, loading, authError, pristine, submitting  } = this.props;
     if(isAuthenticated) {
       return (
         <Redirect to="/"/>
@@ -39,9 +39,12 @@ export class SignUpForm extends Component {
           <div className="sign-up__container_password-confirm">
             <Field name="confirmPassword" label="Confirm Password" className="sign-up__container_input" component={ErrorField} type="password" />
           </div>
+          <div className="sign-in__container_error">
+            {authError}
+          </div>
           <div className="sign-up__container_submit-button">
             {loading && <Loader />}
-            <button disabled={loading} type="submit" className="sign-up__container_button">Sign-up</button>
+            <button disabled={pristine || submitting} type="submit" className="sign-up__container_button">Sign-up</button>
           </div>
         </form>
         <div className="sign-up__container_redirect">
@@ -56,5 +59,7 @@ export class SignUpForm extends Component {
 
 export default reduxForm({
   form: 'sign-up',
-  validate
+  validate,
+  asyncValidate,
+  asyncBlurFields: ['email']
 })(SignUpForm)

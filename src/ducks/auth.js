@@ -1,7 +1,6 @@
 import { appName } from '../config'
 import { Record } from 'immutable'
 import history from '../history'
-import { push } from 'connected-react-router'
 import * as API from '../api'
 import * as Helper  from '../helpers'
 import axios from 'axios'
@@ -68,7 +67,7 @@ export default function reducer(state = new ReducerRecord(), action) {
       deleteResponseInterceptor();
       return new ReducerRecord()
 
-    default: 
+    default:
       return state;
   }
 }
@@ -132,16 +131,13 @@ export const setUser = (token) => (dispatch) => {
   })
 }
 
-
-
 export function signOut() {
-  // push('/auth/sign-in')
   return {
       type: SIGN_OUT_SUCCESS
     }
 }
 
- function setAuthorizationToken(token) {
+function setAuthorizationToken(token) {
 
   if (Helper.empty(token)) {
     delete axios.defaults.headers.common['Authorization'];

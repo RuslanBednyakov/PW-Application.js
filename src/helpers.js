@@ -1,4 +1,5 @@
-import emailValidator from 'email-validator';
+import emailValidator from 'email-validator'
+import * as API from './api'
 
 export const validate = ({email, userName, password, confirmPassword}) => {
 
@@ -22,4 +23,14 @@ export function empty (val) {
   return (typeof val === 'undefined' || val === '' || val === 0 || val === '0' || val === null
     || val === false || (typeof val === 'object' && !Object.keys(val).length) || (Array.isArray(val) && !val.length)
   )
+}
+
+export const asyncValidate = (values) => {
+  console.log('asyncValidate', values)
+  return API.auth.checkEmail(values)
+    .then((response) => {
+    if (response.message === 'This email already exists') {
+      throw { email: 'This email already exists' }
+    }
+  })
 }

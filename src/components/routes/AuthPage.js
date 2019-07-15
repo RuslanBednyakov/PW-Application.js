@@ -12,22 +12,23 @@ export class AuthPage extends Component {
     isAuthenticated: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     signUp: PropTypes.func.isRequired,
-    signIn: PropTypes.func.isRequired
+    signIn: PropTypes.func.isRequired,
+    error: PropTypes.string
   }
 
   render() {
     console.log('Auth Page');
     console.log('Auth props', this.props)
-    const { match, isAuthenticated, loading } = this.props;
+    const { match, isAuthenticated, loading, error } = this.props;
     return (
       <Switch>
         <Route 
           path={`${match.url}/sign-in`} 
-          render={() => <SignInForm onSubmit={this.handleSignIn} isAuthenticated={isAuthenticated} loading={loading}/>} 
+          render={() => <SignInForm onSubmit={this.handleSignIn} isAuthenticated={isAuthenticated} loading={loading} authError={error} />} 
         />
         <Route 
           path={`${match.url}/sign-up`} 
-          render={() => <SignUpForm onSubmit={this.handleSignUp} isAuthenticated={isAuthenticated} loading={loading}/>}
+          render={() => <SignUpForm onSubmit={this.handleSignUp} isAuthenticated={isAuthenticated} loading={loading} authError={error} />}
         />
         <Redirect to={`${match.url}/sign-in`} />
       </Switch>
@@ -47,5 +48,6 @@ export class AuthPage extends Component {
 
 export default connect(state => ({
   loading: state[moduleName].loading,
-  isAuthenticated: state[moduleName].isAuthenticated
+  isAuthenticated: state[moduleName].isAuthenticated,
+  error: state[moduleName].error && state[moduleName].error.response.data.message
 }), { signUp, signIn })(AuthPage);
