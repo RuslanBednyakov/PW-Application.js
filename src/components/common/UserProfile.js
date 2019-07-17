@@ -8,6 +8,10 @@ export class UserProfile extends Component {
 
   }
 
+  componentDidMount() {
+    
+  }
+
   render() {
     const { user } = this.props
     return (
