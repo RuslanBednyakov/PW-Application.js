@@ -21,9 +21,10 @@ export class MainContainer extends Component {
             <NavigationBar />
             <div className='container'>
               <div className ='main'>
+              {/* <Route component={Transactions} /> */}
                 <Switch>
                   <Route path='/transactions'  component={Transactions} />
-                  <Redirect to='/transactions' />
+                  <Redirect to='transactions' />
                 </Switch>
               </div>
             </div>

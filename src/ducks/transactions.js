@@ -1,7 +1,7 @@
 import { appName } from '../config'
 import { Record, List } from 'immutable'
 import io from "socket.io-client"
-import config from '../config'
+import { config } from '../config'
 import * as API from '../api'
 
 

@@ -15,6 +15,9 @@ export class Transactions extends Component {
     console.log('Transactions')
     const {match, loading} = this.props;
     return (
+      // <Route 
+      //   render={() => <NewTransactionForm onSubmit={this.handleNewTransaction} loading={loading}/>} 
+      // />
       <Switch>
         <Route 
           path={`${match.url}/new`} 
