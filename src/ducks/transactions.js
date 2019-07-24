@@ -1,11 +1,8 @@
 import { appName } from '../config'
 import { Record, List } from 'immutable'
 import io from "socket.io-client"
-import history from '../history'
 import config from '../config'
 import * as API from '../api'
-import * as Helper  from '../helpers'
-import axios from 'axios'
 
 
 export const ReducerRecord = Record({
